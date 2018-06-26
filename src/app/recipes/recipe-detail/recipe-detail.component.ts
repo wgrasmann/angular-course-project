@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Recipe } from '../recipe.model';
-import { ShoppingListService } from '../../shopping-list/shopping-list.service';
-import { Ingredient } from '../../shared/ingredient.model';
 import { RecipeService } from '../recipe.service';
 
 @Component({
@@ -12,18 +10,15 @@ import { RecipeService } from '../recipe.service';
   styleUrls: ['./recipe-detail.component.css']
 })
 export class RecipeDetailComponent implements OnInit {
-
   recipe: Recipe;
   id: number;
 
-  constructor(private shoppingListService: ShoppingListService,
-    private recipeService: RecipeService,
-    private router: Router,
-    private route: ActivatedRoute) { }
+  constructor(private recipeService: RecipeService,
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit() {
-    // const id = this.route.snapshot.params['id'];
-    // better to subscribe to 'params' observable so we react to route change
     this.route.params
       .subscribe(
         (params: Params) => {
@@ -34,19 +29,15 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onAddToShoppingList() {
-    for (const ingr of this.recipe.ingredients) {
-      this.shoppingListService.addIngredient(ingr);
-    }
+    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
   }
 
   onEditRecipe() {
     this.router.navigate(['edit'], {relativeTo: this.route});
-    // below the alternative with going up one level and usin id that way
     // this.router.navigate(['../', this.id, 'edit'], {relativeTo: this.route});
   }
 
   onDeleteRecipe() {
-    console.log(this.id);
     this.recipeService.deleteRecipe(this.id);
     this.router.navigate(['/recipes']);
   }

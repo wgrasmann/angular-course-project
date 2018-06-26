@@ -1,5 +1,5 @@
-import * as firebase from 'firebase';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -10,9 +10,9 @@ export class AuthService {
 
   signupUser(email: string, password: string) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .catch (
+      .catch(
         error => console.log(error)
-      );
+      )
   }
 
   signinUser(email: string, password: string) {
@@ -23,7 +23,7 @@ export class AuthService {
           firebase.auth().currentUser.getToken()
             .then(
               (token: string) => this.token = token
-            );
+            )
         }
       )
       .catch(
@@ -41,7 +41,7 @@ export class AuthService {
       .then(
         (token: string) => this.token = token
       );
-      return this.token;
+    return this.token;
   }
 
   isAuthenticated() {
